@@ -1,5 +1,7 @@
 /* vim: set ft=javascript ts=2 et sw=2 tw=80: */
 var config = require('./config');
+var regexbot = require('./regexbot');
+regexbot.config = config;
 
 var RtmClient = require('@slack/client').RtmClient;
 var rtm = new RtmClient(config.slack_api_token, {logLevel: 'debug'});
@@ -13,14 +15,8 @@ rtm.on(CLIENT_EVENTS.RTM.AUTHENTICATED, function (rtmStartData) {
 });
 
 rtm.on(RTM_EVENTS.MESSAGE, function (message) {
-  for (var item of config.regexes) {
-    var match = item.regex.exec(message.text);
-    if (match) {
-      var msg = item.message;
-      for (var i = 0; i < match.length; i++) {
-        msg = msg.replace('[' + i + ']', match[i]);
-      }
-      rtm.sendMessage(msg, message.channel);
-    }
+  var reply = regexbot.respond(message.text);
+  if (reply) {
+    rtm.sendMessage(reply, message.channel);
   }
 });
