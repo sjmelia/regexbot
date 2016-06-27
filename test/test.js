@@ -1,7 +1,7 @@
 /* vim: set ft=javascript ts=2 et sw=2 tw=80: */
 /* global describe it */
 var assert = require('chai').assert;
-var regexbot = require('../regexbot');
+var regexbot = require('../src/regexbot');
 var config = {
   regexes: [
     { regex: /[A-Z]+-[0-9]+/g, message: 'http://my-jira.com/?q=[0]' }
