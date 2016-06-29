@@ -3,6 +3,7 @@ var config = {};
 config.slack_api_token = 'xxxx-xxxxxxxxx-xxx';
 
 config.regexes = [
+  { regex: /RND-[0-9]+/g, message: ['A: [0]', 'B: [0]'] },
   { regex: /[A-Z]+-[0-9]+/g, message: 'http://my-jira.com/?q=[0]' },
   { regex: /TFS-[0-9]+/g, message: 'You mentioned [0]' },
   { regex: /Bug ([0-9]+) Comment ([0-9]+)/g, message: 'You mentioned Bugzilla [1] Comment [2]' }

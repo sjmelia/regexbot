@@ -17,7 +17,9 @@ Setup
 Matching
 --------
 
-`config.js` contains a list of regexes, and a corresponding message to show.
+See `config.js.example` for examples.
+
+`config.js` contains a list of regexes, and a corresponding message, or messages (if an array) to show.
+
 A simple search and replace for numbers in square brackets then fills in the
 matches - `[0]` for the whole string, `[1]` for the first match, and so on.
-See `config.js.example` for examples.
