@@ -14,4 +14,9 @@ describe('Regexbot', function () {
     var reply = regexbot.respond('CL-100');
     assert.equal(reply, 'http://my-jira.com/?q=CL-100');
   });
+
+  it('should return multiples seperated by newlines', function() {
+    var reply = regexbot.respond('CL-100 CL-200');
+    assert.equal(reply, 'http://my-jira.com/?q=CL-100\nhttp://my-jira.com/?q=CL-200');
+  });
 });
