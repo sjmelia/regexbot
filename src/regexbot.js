@@ -13,7 +13,7 @@ function RegexBot (config, randomiser) {
 
         var msg = item.message;
         if (item.message.constructor === Array) {
-          var randomIndex = randomiser(item.message.length);
+          var randomIndex = this.randomiser(item.message.length);
           msg = item.message[randomIndex];
         }
 
