@@ -1,14 +1,14 @@
 /* vim: set ft=javascript ts=2 et sw=2 tw=80: */
 /* global describe it */
 var assert = require('chai').assert;
-var regexbot = require('../src/regexbot');
+var RegexBot = require('../src/regexbot');
 var config = {
   regexes: [
     { regex: /[A-Z]+-[0-9]+/g, message: 'http://my-jira.com/?q=[0]' },
     { regex: /([A-Z]+)-([A-Z]+)/g, message: 'A:[0] B:[1] C:[2]' }
   ]
 };
-regexbot.config = config;
+regexbot = new RegexBot(config, null);
 
 describe('Regexbot', function () {
   it('should return the correct url', function () {
