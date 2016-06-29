@@ -12,6 +12,11 @@ function RegexBot (config, randomiser) {
         if (output.length > 0) output += '\n';
 
         var msg = item.message;
+        if (item.message.constructor === Array) {
+          var randomIndex = randomiser(item.message.length);
+          msg = item.message[randomIndex];
+        }
+
         for (var i = 0; i < match.length; i++) {
           msg = msg.replace('[' + i + ']', match[i]);
         }
