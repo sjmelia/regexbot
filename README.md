@@ -11,7 +11,7 @@ Setup
 1. Create a [new bot user](https://my.slack.com/services/new/bot) to get a slack api token.
 2. `cp config.js.example src/config.js`
 3. Edit `src/config.js` to have your slack api token and selected regexes.
-4. `npm start`
+4. `npm install && npm start`
 5. Try it out on a slack channel!
 
 Matching
