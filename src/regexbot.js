@@ -4,7 +4,7 @@ function RegexBot (config, randomiser) {
   this.randomiser = randomiser;
   this.respond = respond;
 
-  function respond (text) {
+  function respond (text, callback) {
     for (var item of this.config.regexes) {
       var match;
       var output = '';
@@ -17,14 +17,19 @@ function RegexBot (config, randomiser) {
           msg = item.message[randomIndex];
         }
 
-        for (var i = 0; i < match.length; i++) {
-          msg = msg.replace('[' + i + ']', match[i]);
+        if (typeof item.message === 'function') {
+          item.message(match, callback);
+        } else {
+          for (var i = 0; i < match.length; i++) {
+            msg = msg.replace('[' + i + ']', match[i]);
+          }
+          output += msg;
         }
-        output += msg;
       }
 
       if (output.length > 0) {
-        return output;
+        callback(output);
+        return;
       }
     }
     return null;

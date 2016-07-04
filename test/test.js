@@ -15,29 +15,45 @@ regexbot = new RegexBot(config, randomiser);
 
 describe('Regexbot', function () {
   it('should return the correct url', function () {
-    var reply = regexbot.respond('CL-100');
+    var reply = '';
+
+    regexbot.respond('CL-100', function (txt) {
+      reply = txt;
+    });
     assert.equal(reply, 'http://my-jira.com/?q=CL-100');
   });
 
   it('should return multiples seperated by newlines', function () {
-    var reply = regexbot.respond('CL-100 CL-200');
+    var reply = '';
+    regexbot.respond('CL-100 CL-200', function (txt) {
+      reply = txt;
+    });
     assert.equal(reply, 'http://my-jira.com/?q=CL-100\nhttp://my-jira.com/?q=CL-200');
   });
 
   it('should populate with groups', function () {
-    var reply = regexbot.respond('ABC-DEF');
+    var reply = '';
+    regexbot.respond('ABC-DEF', function (txt) {
+      reply = txt;
+    });
     assert.equal(reply, 'A:ABC-DEF B:ABC C:DEF');
   });
 
   it('should return the first item when randomiser is 0', function () {
     rnd = 0;
-    var reply = regexbot.respond('RND-000');
+    var reply = '';
+    regexbot.respond('RND-000', function (txt) {
+      reply = txt;
+    });
     assert.equal(reply, 'A: RND-000');
   });
 
   it('should return the second item when randomiser is 1', function () {
     rnd = 1;
-    var reply = regexbot.respond('RND-000');
+    var reply = '';
+    regexbot.respond('RND-000', function (txt) {
+      reply = txt;
+    });
     assert.equal(reply, 'B: RND-000');
   });
 

@@ -7,7 +7,7 @@ var randomiser = function (max) {
 var regexbot = new RegexBot(config, randomiser);
 
 var RtmClient = require('@slack/client').RtmClient;
-var rtm = new RtmClient(config.slack_api_token, {logLevel: 'debug'});
+var rtm = new RtmClient(config.slack_api_token);
 rtm.start();
 
 var CLIENT_EVENTS = require('@slack/client').CLIENT_EVENTS;
@@ -18,8 +18,11 @@ rtm.on(CLIENT_EVENTS.RTM.AUTHENTICATED, function (rtmStartData) {
 });
 
 rtm.on(RTM_EVENTS.MESSAGE, function (message) {
-  var reply = regexbot.respond(message.text);
-  if (reply) {
-    rtm.sendMessage(reply, message.channel);
+  if (message.subtype === 'bot_message') {
+    return;
   }
+
+  regexbot.respond(message.text, function (reply) {
+    rtm.sendMessage(reply, message.channel);
+  });
 });
