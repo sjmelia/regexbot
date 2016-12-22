@@ -6,9 +6,14 @@ var randomiser = function (max) {
 };
 var regexbot = new RegexBot(config, randomiser);
 
-var RtmClient = require('@slack/client').RtmClient;
+var slackClient = require('@slack/client');
+var RtmClient = slackClient.RtmClient;
+var WebClient = slackClient.WebClient;
+
 var rtm = new RtmClient(config.slack_api_token);
-rtm.start();
+var rtmData = rtm.start();
+
+var web = new WebClient(config.slack_api_token);
 
 var CLIENT_EVENTS = require('@slack/client').CLIENT_EVENTS;
 var RTM_EVENTS = require('@slack/client').RTM_EVENTS;
@@ -22,7 +27,12 @@ rtm.on(RTM_EVENTS.MESSAGE, function (message) {
     return;
   }
 
+  if (message.user === rtm.activeUserId) {
+    return;
+  }
+
   regexbot.respond(message.text, function (reply) {
-    rtm.sendMessage(reply, message.channel);
+    web.chat.postMessage(message.channel, reply, { as_user: true });
+//    rtm.sendMessage(reply, message.channel);
   });
 });

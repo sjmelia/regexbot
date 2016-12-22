@@ -1,12 +1,25 @@
-var config = {};
+/* vim: set ft=javascript ts=2 et sw=2 tw=80: */
+var config = {
+  slack_api_token: 'xxxx-xxxxxxxxx-xxx';
+};
 
-config.slack_api_token = 'xxxx-xxxxxxxxx-xxx';
+// Configure a responder that will log into Jira and retrieve message summary
+var JiraResponder = require("./jira");
+var jiraConfig = {
+  protocol: 'http',
+  host: 'my-jira.com',
+  port: '80',
+  username: 'xxxx',
+  password: 'xxxx',
+  apiVersion: '2'
+};
+var jiraResponder = JiraResponder(jiraConfig);
 
 config.regexes = [
   { regex: /RND-[0-9]+/g, message: ['A: [0]', 'B: [0]'] },
-  { regex: /[A-Z]+-[0-9]+/g, message: 'http://my-jira.com/?q=[0]' },
   { regex: /TFS-[0-9]+/g, message: 'You mentioned [0]' },
-  { regex: /Bug ([0-9]+) Comment ([0-9]+)/g, message: 'You mentioned Bugzilla [1] Comment [2]' }
+  { regex: /Bug ([0-9]+) Comment ([0-9]+)/g, message: 'You mentioned Bugzilla [1] Comment [2]' },
+  jiraResponder
 ];
 
 module.exports = config;
