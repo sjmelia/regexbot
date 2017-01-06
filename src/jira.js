@@ -22,8 +22,9 @@ function responder(jira, config) {
 
 function JiraResponder (config) {
 	var jira = new JiraApi(config);
+	
 	return {
-		regex: /[A-Z]+-[0-9]+/g,
+		regex: /[A-Za-z]+-[0-9]+/g,
 		message: responder(jira, config)
 	};
 }
