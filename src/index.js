@@ -23,19 +23,19 @@ rtm.on(CLIENT_EVENTS.RTM.AUTHENTICATED, function (rtmStartData) {
 });
 
 rtm.on(RTM_EVENTS.MESSAGE, function (message) {
-  console.log("Received a message");
+  console.log('Received a message');
   if (message.subtype === 'bot_message' || message.hasOwnProperty('bot_id')) {
     return;
   }
-  
+
   if (message.user === rtm.activeUserId) {
     return;
   }
-  
-  console.log("Accepted a message: " + JSON.stringify(message));
-  
+
+  console.log('Accepted a message: ' + JSON.stringify(message));
+
   regexbot.respond(message.text, function (reply) {
-    console.log("Responding with: " + reply);
+    console.log('Responding with: ' + reply);
     web.chat.postMessage(message.channel, reply, { as_user: true });
   });
 });
