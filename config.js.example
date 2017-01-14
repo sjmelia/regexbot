@@ -1,6 +1,6 @@
 /* vim: set ft=javascript ts=2 et sw=2 tw=80: */
 var config = {
-  slack_api_token: 'xxxx-xxxxxxxxx-xxx';
+  slack_api_token: 'xxxx-xxxxxxxxx-xxx'
 };
 
 // Configure a responder that will log into Jira and retrieve message summary
