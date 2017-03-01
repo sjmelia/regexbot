@@ -3,7 +3,7 @@ var JiraApi = require('jira-client');
 
 function responder(jira, config) {
 	return function(match, callback) {
-		var issueId = match[0];
+		var issueId = match[2];
 		var link = config.protocol + '://' + config.host + ':' + config.port + '/browse/' + issueId;
 		var slackLink = '<' + link + '|' + issueId + '>';
 		jira.findIssue(issueId)
@@ -24,7 +24,7 @@ function JiraResponder (config) {
 	var jira = new JiraApi(config);
 	
 	return {
-		regex: /[A-Za-z]+-[0-9]+/g,
+		regex: /(^|\s)([A-Za-z]+-[0-9]+)/g,
 		message: responder(jira, config)
 	};
 }

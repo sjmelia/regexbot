@@ -6,7 +6,8 @@
   "main": "src/index.js",
   "dependencies": {
     "@slack/client": "^3.5.0",
-    "jira-client": "^4.2.0"
+    "jira-client": "^4.2.0",
+    "node-schedule": "^1.2.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
