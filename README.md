@@ -28,3 +28,8 @@ matches - `[0]` for the whole string, `[1]` for the first match, and so on.
 
 An example function is given for Jira, taking a config object. This function will connect to Jira, 
 retrieve the message summary for the given case (if found) and respond with a nicely formatted message/link
+
+Development
+-----------
+
+`npm test` to lint and run tests

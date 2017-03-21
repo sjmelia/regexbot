@@ -3,38 +3,38 @@ var JiraResponder = require("./jira");
 var rabbitmqresponder = require("./rabbitmq");
 
 var config = {
-	slack_api_token: 'xxxx-xxxxxxxxx-xxx',
-	
-	regexes: [
-		{ regex: /RND-[0-9]+/g, message: ['A: [0]', 'B: [0]'] },
-		{ regex: /TFS-[0-9]+/g, message: 'You mentioned [0]' },
-		{ regex: /Bug ([0-9]+) Comment ([0-9]+)/g, message: 'You mentioned Bugzilla [1] Comment [2]' }
-	],
-	
-	schedules: [
-		 { cron: "0 10 * * *", channel: "#bots", message: "This is a scheduled message at 10am <http://www.google.co.uk/|check google>!" },
-		 { cron: "0 9 * * *", channel: "#bots", message: "This is a scheduled message at 9am" }
-	],
-	
-	build: function (id) {
-	
-		// Jira integration
-		var jiraConfig = {
-		  protocol: 'http',
-		  host: 'my-jira.com',
-		  port: '80',
-		  username: 'xxxx',
-		  password: 'xxxx',
-		  apiVersion: '2'
-		};
+  slack_api_token: 'xxxx-xxxxxxxxx-xxx',
 
-		var jiraResponder = JiraResponder(jiraConfig);
-		this.regexes.push(jiraResponder);
+  regexes: [
+    { regex: /RND-[0-9]+/g, message: ['A: [0]', 'B: [0]'] },
+    { regex: /TFS-[0-9]+/g, message: 'You mentioned [0]' },
+    { regex: /Bug ([0-9]+) Comment ([0-9]+)/g, message: 'You mentioned Bugzilla [1] Comment [2]' }
+  ],
 
-		// RabbitMQ integration
-		var purgeFn = rabbitmqresponder('vhost', 'queue-name', { host: 'my-rabbit-host', username: 'my-rabbit-user', password: 'my-rabbit-password' });
-		var purgeRegex = new RegExp('<@' + id + '> purge queue-name', 'g');
-		this.regexes.push({ regex: purgeRegex, message: purgeFn });
-	}
+  schedules: [
+    { cron: "0 10 * * *", channel: "#bots", message: "This is a scheduled message at 10am <http://www.google.co.uk/|check google>!" },
+    { cron: "0 9 * * *", channel: "#bots", message: "This is a scheduled message at 9am" }
+  ],
+
+  build: function (id) {
+
+    // Jira integration
+    var jiraConfig = {
+      protocol: 'http',
+      host: 'my-jira.com',
+      port: '80',
+      username: 'xxxx',
+      password: 'xxxx',
+      apiVersion: '2'
+    };
+
+    var jiraResponder = JiraResponder(jiraConfig);
+    this.regexes.push(jiraResponder);
+
+    // RabbitMQ integration
+    var purgeFn = rabbitmqresponder('vhost', 'queue-name', { host: 'my-rabbit-host', username: 'my-rabbit-user', password: 'my-rabbit-password' });
+    var purgeRegex = new RegExp('<@' + id + '> purge queue-name', 'g');
+    this.regexes.push({ regex: purgeRegex, message: purgeFn });
+  }
 };
 module.exports = config;
