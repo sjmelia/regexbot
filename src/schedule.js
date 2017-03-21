@@ -2,11 +2,11 @@
 var schedule = require('node-schedule');
 
 module.exports = function (schedules, poster) {
-	var jobs = [];
-	for (var item of schedules) {
-		console.log(`Registering a job with schedule ${item.cron} for channel ${item.channel} and message ${item.message}`);
-		var job = schedule.scheduleJob(item.cron, function() { poster(item.channel, item.message); });
-		jobs.push(job);
-	}
-	return jobs;
+  var jobs = [];
+  for (var item of schedules) {
+    console.log(`Registering a job with schedule ${item.cron} for channel ${item.channel} and message ${item.message}`);
+    var job = schedule.scheduleJob(item.cron, function () { poster(item.channel, item.message); });
+    jobs.push(job);
+  }
+  return jobs;
 };
