@@ -5,18 +5,75 @@ var rabbitmqresponder = require("./rabbitmq");
 var config = {
   slack_api_token: 'xxxx-xxxxxxxxx-xxx',
 
+  // Respond to a message detected by regex.
   regexes: [
     { regex: /RND-[0-9]+/g, message: ['A: [0]', 'B: [0]'] },
     { regex: /TFS-[0-9]+/g, message: 'You mentioned [0]' },
     { regex: /Bug ([0-9]+) Comment ([0-9]+)/g, message: 'You mentioned Bugzilla [1] Comment [2]' }
   ],
 
+  // Send a message on a schedule.
   schedules: [
     { cron: "0 10 * * *", channel: "#bots", message: "This is a scheduled message at 10am <http://www.google.co.uk/|check google>!" },
     { cron: "0 9 * * *", channel: "#bots", message: "This is a scheduled message at 9am" }
   ],
 
-  build: function (id) {
+  // This method is called just after the bot has connected to slack, and takes
+  // the id of the logged in user. Because schedules and regexes both take
+  // functions as parameters, it's possible to construct more sophisticated
+  // responses.
+  build: function (web, id) {
+    /*var users = [];
+    web.users.list(function (err, info) {
+      if (err) {
+        console.log('Error ' + err);
+        return;
+      }
+      users = info.members;
+    });
+
+    function getUser(name) {
+      for (var userid in users) {
+        var user = users[userid];
+        if (user.name == name) {
+          return user;
+        }
+      }
+    }*/
+
+    // call a function on a schedule - pull an entry from rotatastic for the
+    // current date.
+    var rotatastic = require('./rotatastic.js');
+    console.log("Building with id " + id);
+    this.schedules.push({
+      cron: '20 22 * * *',
+      channel: '#general',
+      message: function (poster) {
+        console.log('Sending msg');
+        var cb = function (response) {
+
+          /*var tokens = response.entry.split(" ");
+          var msg = '';
+          for (var idx in tokens) {
+            var token = tokens[idx];
+            if (token.charAt(0) == '@') {
+              var at = token.substring(1, token.length-1);
+              var user = getUser(at);
+              if (typeof user != 'undefined') {
+                console.log(user);
+                msg += '<@' + user.id + '|' + user.name + '> ';
+                continue;
+              }
+            }
+
+            msg += token + ' ';
+          }*/
+
+          poster('On the rota today: ' + response.entry);
+        };
+        rotatastic.getEntry('e341f220-6ce2-4877-b1ff-e2596a9e9869', '2017', '03', '01', cb, function (e) { console.log(e); });
+      }
+    });
 
     // Jira integration
     var jiraConfig = {
@@ -26,13 +83,14 @@ var config = {
       username: 'xxxx',
       password: 'xxxx',
       apiVersion: '2'
-    };
+      };
 
-    var jiraResponder = JiraResponder(jiraConfig);
-    this.regexes.push(jiraResponder);
+      var jiraResponder = JiraResponder(jiraConfig);
+      this.regexes.push(jiraResponder);
 
     // RabbitMQ integration
     var purgeFn = rabbitmqresponder('vhost', 'queue-name', { host: 'my-rabbit-host', username: 'my-rabbit-user', password: 'my-rabbit-password' });
+    // match a message sent to the bot (e.g. @regexbot)
     var purgeRegex = new RegExp('<@' + id + '> purge queue-name', 'g');
     this.regexes.push({ regex: purgeRegex, message: purgeFn });
   }
