@@ -11,7 +11,7 @@ var RtmClient = slackClient.RtmClient;
 var WebClient = slackClient.WebClient;
 
 var rtm = new RtmClient(config.slack_api_token);
-var startInfo = rtm.start();
+rtm.start();
 
 var web = new WebClient(config.slack_api_token);
 

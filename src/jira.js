@@ -14,6 +14,7 @@ function responder (jira, config) {
       if (err.statusCode === 404) {
         callback(slackLink + ' - I couldn\'t find this one... (404)');
       } else {
+        console.error(err);
         callback(slackLink + ' - Oh no! An error occured (' + err.statusCode + ')');
       }
     });
