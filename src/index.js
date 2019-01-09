@@ -6,25 +6,20 @@ var randomiser = function (max) {
 };
 var regexbot = new RegexBot(config, randomiser);
 
-var slackClient = require('@slack/client');
-var RtmClient = slackClient.RtmClient;
-var WebClient = slackClient.WebClient;
+const { RTMClient, WebClient, ErrorCode } = require('@slack/client');
 
-var rtm = new RtmClient(config.slack_api_token);
+var rtm = new RTMClient(config.slack_api_token);
 rtm.start();
 
 var web = new WebClient(config.slack_api_token);
 
-var CLIENT_EVENTS = require('@slack/client').CLIENT_EVENTS;
-var RTM_EVENTS = require('@slack/client').RTM_EVENTS;
-
-rtm.on(CLIENT_EVENTS.RTM.AUTHENTICATED, function (rtmStartData) {
+rtm.on('authenticated', function (rtmStartData) {
   console.log(`Logged in as "${rtmStartData.self.name}" of team "${rtmStartData.team.name}", but not yet connected to a channel`);
   console.log(rtmStartData.self.id);
   config.build(rtmStartData.self.id);
 });
 
-rtm.on(RTM_EVENTS.MESSAGE, function (message) {
+rtm.on('message', function (message) {
   console.log('Received a message');
   if (message.subtype === 'bot_message' || message.hasOwnProperty('bot_id')) {
     return;
@@ -38,10 +33,24 @@ rtm.on(RTM_EVENTS.MESSAGE, function (message) {
 
   regexbot.respond(message.text, function (reply) {
     console.log('Responding with: ' + reply);
-    web.chat.postMessage(message.channel, reply, { as_user: true });
+    postMessage({ channel: message.channel, text: reply, as_user: true });
   });
 });
 
+function postMessage (options) {
+  web.chat.postMessage(options)
+    .catch(function (error) {
+      if (error.code === ErrorCode.PlatformError) {
+        // a platform error occurred, `error.message` contains error information, `error.data` contains the entire resp
+        console.error(error.message);
+        console.info(error.data);
+      } else {
+        // some other error occurred
+        console.error(error);
+      }
+    });
+}
+
 var scheduler = require('./schedule.js');
-var poster = function (channel, msg) { web.chat.postMessage(channel, msg, { as_user: true }); };
+var poster = function (channel, msg) { postMessage({ channel: channel, text: msg, as_user: true }); };
 scheduler(config.schedules, poster);

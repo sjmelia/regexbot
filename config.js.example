@@ -1,6 +1,6 @@
 /* vim: set ft=javascript ts=2 et sw=2 tw=80: */
-var JiraResponder = require("./jira");
-var rabbitmqresponder = require("./rabbitmq");
+var JiraResponder = require('./jira');
+var rabbitmqresponder = require('./rabbitmq');
 
 var config = {
   slack_api_token: 'xxxx-xxxxxxxxx-xxx',
@@ -12,12 +12,11 @@ var config = {
   ],
 
   schedules: [
-    { cron: "0 10 * * *", channel: "#bots", message: "This is a scheduled message at 10am <http://www.google.co.uk/|check google>!" },
-    { cron: "0 9 * * *", channel: "#bots", message: "This is a scheduled message at 9am" }
+    { cron: '0 10 * * *', channel: '#bots', message: 'This is a scheduled message at 10am <http://www.google.co.uk/|check google>!' },
+    { cron: '0 9 * * *', channel: '#bots', message: 'This is a scheduled message at 9am' }
   ],
 
   build: function (id) {
-
     // Jira integration
     var jiraConfig = {
       protocol: 'http',
