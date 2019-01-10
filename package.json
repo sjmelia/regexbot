@@ -6,11 +6,11 @@
   "main": "src/index.js",
   "dependencies": {
     "@slack/client": "^4.8.0",
+    "@slack/events-api": "^2.1.1",
     "jira-client": "^4.2.0",
     "node-schedule": "^1.2.0"
   },
   "devDependencies": {
-    "@slack/events-api": "^2.1.1",
     "chai": "^3.5.0",
     "coveralls": "^3.0.2",
     "eslint": "^2.13.1",

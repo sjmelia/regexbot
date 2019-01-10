@@ -5,6 +5,15 @@ var rabbitmqresponder = require('./rabbitmq');
 var config = {
   slack_api_token: 'xxxx-xxxxxxxxx-xxx',
 
+  // Whether or not to use the Slack Real-Time Messaging API instead of the Events API.
+  use_rtm: true,
+
+  // If using the Events API, then configure the following:
+  events: {
+    port: 8888,
+    signing_secret: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+  },
+
   regexes: [
     { regex: /RND-[0-9]+/g, message: ['A: [0]', 'B: [0]'] },
     { regex: /TFS-[0-9]+/g, message: 'You mentioned [0]' },
