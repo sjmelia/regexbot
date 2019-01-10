@@ -25,6 +25,7 @@ if (config.use_rtm) {
   client = createEventAdapter(config.events.signing_secret);
   client.start(config.events.port).then(() => {
     console.log('server listening on port ' + config.events.port);
+    config.build(config.events.port);
   });
 }
 
