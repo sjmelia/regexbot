@@ -29,6 +29,10 @@ matches - `[0]` for the whole string, `[1]` for the first match, and so on.
 An example function is given for Jira, taking a config object. This function will connect to Jira, 
 retrieve the message summary for the given case (if found) and respond with a nicely formatted message/link
 
+Real-Time Messaging API vs. Events API
+-----------
+By default, this bot uses the Slack Real-Time Messaging API to listen and respond to messages. If your bot is running on a Heroku free-tier dyno, this will not work, as the API relies on persistent websockets. Instead, you may use the more traditional Events API, which uses HTTP requests that can wake up your dyno. Simply modify the proper values in `config.js` to enable this.
+
 Development
 -----------
 
