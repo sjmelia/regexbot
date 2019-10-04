@@ -1,5 +1,7 @@
 /* vim: set ft=javascript ts=2 et sw=2 tw=80: */
-var JiraResponder = require('./jira');
+var JiraModule = require("./jira");
+var JiraResponder = JiraModule.JiraResponder;
+var JiraFinder = JiraModule.JiraFinder;
 var rabbitmqresponder = require('./rabbitmq');
 
 var config = {
@@ -29,6 +31,8 @@ var config = {
 
     var jiraResponder = JiraResponder(jiraConfig);
     this.regexes.push(jiraResponder);
+	var jiraFinder = JiraFinder(jiraConfig);
+	this.regexes.push(jiraFinder);
 
     // RabbitMQ integration
     var purgeFn = rabbitmqresponder('vhost', 'queue-name', { host: 'my-rabbit-host', username: 'my-rabbit-user', password: 'my-rabbit-password' });
