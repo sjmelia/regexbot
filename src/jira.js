@@ -31,16 +31,19 @@ function finder (jira, config) {
 	console.log("Searching with query " + query);
     jira.searchJira(query)
       .then(function (results) {
+		var queryLink = config.protocol + '://' + config.host + ':' + config.port + '/issues/?jql=' + encodeURI(query)
+		var querySlackLink = '<' + queryLink + '|' + originalText + '>';
 		if (results.total > 0)
 		{
 			var issue = results.issues[0];
 			var link = config.protocol + '://' + config.host + ':' + config.port + '/browse/' + issue.key;
 			var slackLink = '<' + link + '|' + issue.key + '>';
-			callback(":sleuth_or_spy: \"" + originalText + "\" could be " + slackLink + ': ' + issue.fields.summary);
+			
+			callback(":sleuth_or_spy: I searched for \"" + querySlackLink + "\" and the first result was " + slackLink + ': ' + issue.fields.summary);
 		}
 		else
 		{
-			console.log("Couldn't find anything matching that one in Jira");
+			callback(":sleuth_or_spy: I searched for \"" + querySlackLink + "\" but couldn't find anything");
 		}
       })
     .catch(function (err) {
