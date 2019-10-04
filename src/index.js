@@ -21,9 +21,11 @@ rtm.on('authenticated', function (rtmStartData) {
 
 rtm.on('message', function (message) {
   console.log('Received a message');
-  if (message.subtype === 'bot_message' || message.hasOwnProperty('bot_id')) {
+  /*message.subtype === 'bot_message' || 
+  if (message.hasOwnProperty('bot_id')) {
+	  
     return;
-  }
+  }*/
 
   if (message.user === rtm.activeUserId) {
     return;

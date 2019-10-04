@@ -23,9 +23,11 @@ function responder (jira, config) {
 
 function finder (jira, config) {
   return function (match, callback) {
-    var issueId = match[1];
-	issueId = issueId.replace(/\+|\.|\,|\;|\?|\*|\/|\%|\^|\$|\#|\@|\[|\]/g, " ");
-    var query = "text ~ \"" + issueId + "\"";
+    var originalText = match[1];
+	var issueId = originalText.replace(/\+|\.|\,|\;|\?|\*|\/|\%|\^|\$|\#|\@|\[|\]/g, " ");
+	var originalException = match[2];
+	var escapedException = originalException.replace(/\+|\.|\,|\;|\?|\*|\/|\%|\^|\$|\#|\@|\[|\]/g, " ");
+    var query = "(text ~ \"" + issueId + "\" OR text ~ \"" + escapedException + "\") AND (project = \" ITDev - Collections Board\" AND Status NOT IN (\"Rejected\", \"Live Done\"))";
 	console.log("Searching with query " + query);
     jira.searchJira(query)
       .then(function (results) {
@@ -34,8 +36,12 @@ function finder (jira, config) {
 			var issue = results.issues[0];
 			var link = config.protocol + '://' + config.host + ':' + config.port + '/browse/' + issue.key;
 			var slackLink = '<' + link + '|' + issue.key + '>';
-			callback("This exception could be " + slackLink + ': ' + issue.fields.summary);
-		}			
+			callback(":sleuth_or_spy: \"" + originalText + "\" could be " + slackLink + ': ' + issue.fields.summary);
+		}
+		else
+		{
+			console.log("Couldn't find anything matching that one in Jira");
+		}
       })
     .catch(function (err) {
       //if (err.statusCode === 404) {
